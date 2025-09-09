@@ -1,10 +1,6 @@
 
 2025-09-08 15:34
 
-Status:
-
-Tags:
-
 # Windows Server NAT/Firewall Lab in Hyper-V
 
 ## Overview
@@ -110,14 +106,3 @@ I also learned about **NAT with RRAS** and how Windows Server can translate traf
 A problem I ran into was an **IP conflict**: I had accidentally assigned 192.168.168.1 to both my host machine’s vInternal adapter and the Server VM. This caused the Server VM to drop into a 169.254.x.x address and break connectivity. Once I fixed that by moving the host to 192.168.168.254, the Server was able to stay on 192.168.168.1 and everything worked. That mistake helped me understand why duplicate IPs are such a problem.  
 
 Overall, this lab helped me better understand **subnets, gateways, and NAT**. It was a good step toward learning how enterprise networks are set up, and I now feel more confident about building firewall and routing labs in the future.
-
-
-
-
-
-
-
-
-
-
-# References [[LAB]]
