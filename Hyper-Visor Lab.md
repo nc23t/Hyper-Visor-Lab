@@ -53,7 +53,7 @@ By the end of this lab:
 - Generation 2 VM, 8 GB RAM, 60 GB disk.
 - Installed **Windows Server 2022 Standard (Desktop Experience)**.
 - Added **two NICs**:
-  - External NIC → vExternal switch (DHCP, e.g., `192.168.x.231`).
+  - External NIC → vExternal switch (DHCP, e.g., `192.168.1.X`).
   - Internal NIC → vInternal switch (static `192.168.168.x`).
 	  ![WindowsServerSwitches](images/WindowsServerSwitches.png)
 	  ![WindowsServervInternal](images/WindowsServervInternal.png)
