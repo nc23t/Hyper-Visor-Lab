@@ -22,7 +22,7 @@ By the end of this lab:
     ┌──────────────────────────────────┐
     │     Windows Server 2022 VM       │
     │  External NIC: DHCP from router  │
-    │  Internal NIC: 192.168.168.1/24  │
+    │  Internal NIC: 192.168.168.x/24  │
     │  Role: RRAS (NAT & Routing)      │
     └──────────────────────────────────┘
                     │
@@ -30,7 +30,7 @@ By the end of this lab:
                     │
     ┌──────────────────────────────────┐
     │     Windows 10 Client VM         │
-    │  IP: 192.168.168.2/24            │
+    │  IP: 192.168.168.x/24            │
     │  Gateway: 192.168.168.1          │
     │  DNS: 8.8.8.8                    │
     └──────────────────────────────────┘
@@ -45,7 +45,7 @@ By the end of this lab:
 - Created **vExternal switch** → bound to host’s physical NIC (internet access).
 - Created **vInternal switch** → private lab network between VMs.
 	![VirtualSwitches](images/VirtualSwitches.png)
-- Important: Host originally had `192.168.168.1` assigned to `vInternal`.  
+- Important: Host originally had `192.168.168.x` assigned to `vInternal`.  
   - This conflicted with the Server VM’s internal NIC.  
   - Fixed by moving host’s vInternal IP to `192.168.168.254`.
 
@@ -53,8 +53,8 @@ By the end of this lab:
 - Generation 2 VM, 8 GB RAM, 60 GB disk.
 - Installed **Windows Server 2022 Standard (Desktop Experience)**.
 - Added **two NICs**:
-  - External NIC → vExternal switch (DHCP, e.g., `192.168.1.231`).
-  - Internal NIC → vInternal switch (static `192.168.168.1`).
+  - External NIC → vExternal switch (DHCP, e.g., `192.168.x.231`).
+  - Internal NIC → vInternal switch (static `192.168.168.x`).
 	  ![WindowsServerSwitches](images/WindowsServerSwitches.png)
 	  ![WindowsServervInternal](images/WindowsServervInternal.png)
 	  ![WindowsServervExternalDHCP](images/WindowsServervExternalDHCP.png)
@@ -68,9 +68,9 @@ By the end of this lab:
 - Generation 2 VM, 6 GB RAM, 60 GB disk.
 - Attached NIC → *vInternal* switch only.
 - Static IP config:
-  - IP: `192.168.168.2`
+  - IP: `192.168.168.x`
   - Subnet: `255.255.255.0`
-  - Gateway: `192.168.168.1`
+  - Gateway: `192.168.168.x`
   - DNS: `8.8.8.8`
 	![Windows10VMSwitch](images/Windows10VMSwitch.png)
 
@@ -84,7 +84,7 @@ On **Windows 10 Client**:
 
 
 ```powershell
-ping 192.168.168.254 #  replies from Server's internal NIC
+ping 192.168.x.254 #  replies from Server's internal NIC
 ping 8.8.8.8         #  succeeds via NAT
 ping google.com      #  DNS resolution working
 ```
@@ -99,10 +99,10 @@ ping google.com      #  DNS resolution working
 
 In this lab I was able to set up a Windows Server 2022 VM in Hyper-V and use it as a NAT router/firewall for a Windows 10 client. I built the network with two Hyper-V switches: an **External switch** that connected the Server VM to my home network for internet access, and an **Internal switch** that created a private subnet where my Server and Client could communicate.  
 
-One of the biggest things I learned was how important the **default gateway** is. My Windows 10 VM could talk to other devices on the 192.168.168.x subnet, but anything outside that subnet had to go through the Server VM (192.168.168.1). This really showed me how a gateway works in practice.  
+One of the biggest things I learned was how important the **default gateway** is. My Windows 10 VM could talk to other devices on the 192.168.168.x subnet, but anything outside that subnet had to go through the Server VM (192.168.168.x). This really showed me how a gateway works in practice.  
 
 I also learned about **NAT with RRAS** and how Windows Server can translate traffic from one network to another. This reminded me of how a home router works, but I got to configure it myself.  
 
-A problem I ran into was an **IP conflict**: I had accidentally assigned 192.168.168.1 to both my host machine’s vInternal adapter and the Server VM. This caused the Server VM to drop into a 169.254.x.x address and break connectivity. Once I fixed that by moving the host to 192.168.168.254, the Server was able to stay on 192.168.168.1 and everything worked. That mistake helped me understand why duplicate IPs are such a problem.  
+A problem I ran into was an **IP conflict**: I had accidentally assigned 192.168.168.1 to both my host machine’s vInternal adapter and the Server VM. This caused the Server VM to drop into a 169.254.x.x address and break connectivity. Once I fixed that by moving the host to 192.168.168.254, the Server was able to stay on 192.168.168.x and everything worked. That mistake helped me understand why duplicate IPs are such a problem.  
 
 Overall, this lab helped me better understand **subnets, gateways, and NAT**. It was a good step toward learning how enterprise networks are set up, and I now feel more confident about building firewall and routing labs in the future.
